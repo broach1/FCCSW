@@ -17,10 +17,10 @@
     <comment>master file with includes and world dimension</comment>
   </info>
   <define>
-    <constant name="world_size" value="8.1*m"/>
-    <constant name="world_x" value="3.7*m"/>
-    <constant name="world_y" value="3.7*m"/>
-    <constant name="world_z" value="8.1*m"/>
+    <constant name="world_size" value="10*m"/>
+    <constant name="world_x" value="3.6*m"/>
+    <constant name="world_y" value="3.6*m"/>
+    <constant name="world_z" value="10*m"/>
   </define>
   <include ref="./FCChh_DectDimensions.xml" />
 
