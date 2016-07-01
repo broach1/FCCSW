@@ -1,14 +1,14 @@
-<detector id="5" name="ECalBarrel" type="EmCaloBarrel" readout="BarECal_Readout" vis="ecal_envelope">
+<detector id="5" name="ECalBarrel" type="EmCaloBarrel" readout="BarECal_Readout">
   <sensitive type="EcalCalorimeterSD"/> 
-  <!--   <sensitive type="Geant4Calorimeter"/>  -->
-  <dimensions rmin="BarECal_rmin" rmax="BarECal_rmax" dz="BarECal_dz" />
+  <!--<calibration_hits label="false"/>-->
+  <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
   <cryostat id="1" name="ECAL_Cryo" material="Aluminum" >
-    <dimensions rmin="BarECal_rmin+10*mm" rmax="BarECal_rmax-10*mm" dz="BarECal_dz-10*mm" thickness="100*mm" />
+    <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" thickness="10*mm" />
   </cryostat>
-  <calorimeter id="1" name="EM_barrel" > 
-    <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" />
-    <!--fixed dimensions to agree with the ones in FCCSW -->
-    <active_layers thickness="4*mm" material="LAr" />
-    <passive_layers thickness="2*mm" material="Lead" />
+  <calorimeter id="1" name="EM_barrel" >
+    <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" nphi="31" />
+    <active_layers thickness="4.0*mm" material="LAr" sensitive="true" vis="ecal_active_vis" />
+    <passive_layers thickness="2.0*mm" material="Lead" sensitive="false" vis="ecal_passive_vis" />
+    <caloZmodule thickness="50*mm" vis="ecal_caloZmodule_vis" />
   </calorimeter>
 </detector>

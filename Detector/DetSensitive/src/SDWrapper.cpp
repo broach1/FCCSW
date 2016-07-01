@@ -33,14 +33,14 @@ static G4VSensitiveDetector* create_simple_calorimeter_sd(
 }
 // Factory method to create an instance of EcalCalorimeterSD 
 static G4VSensitiveDetector* create_ecal_calorimeter_sd(
-					    const std::string& aDetectorName,
-					    DD4hep::Geometry::LCDD& aLcdd)  {
+    const std::string& aDetectorName,
+    DD4hep::Geometry::LCDD& aLcdd)  {
   std::cout<<"Creating an external SD of type <<EcalCalorimeterSD>> with name "<<aDetectorName<<std::endl;
   std::string readoutName = aLcdd.sensitiveDetector(aDetectorName).readout().name();
   std::cout<<"readout name: "<<readoutName<<std::endl;
   return new det::EcalCalorimeterSD(aDetectorName,
-			readoutName,
-			aLcdd.sensitiveDetector(aDetectorName).readout().segmentation());
+    readoutName,
+    aLcdd.sensitiveDetector(aDetectorName).readout().segmentation());
 }
 }
 }
