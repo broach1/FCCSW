@@ -5,15 +5,15 @@ import numpy as np
 #seed_array = np.loadtxt('seeds.txt',dtype='int',delimiter=',')
 
 #the space below (lines 8-22) are for job options (ENE, EVTMAX, etc)
-ENE=500e3
-EVTMAX=15
+ENE=1000e3
+EVTMAX=250
 BFIELD=0
 PHIMIN=0
 PHIMAX=6.28
 VX=0
 VY=0
 VZ=0
-i=34
+i=2
 CLUSTER=0
 
 
@@ -76,10 +76,17 @@ from Configurables import PodioOutput
 out = PodioOutput("out",
                    OutputLevel=ERROR)
 
-#if CLUSTER==1: #otherwise use the generic name output.root for Grid runs
-#    out.filename = "e"+str(int(ENE/1e3))+"_part"+str(i)+"_lar"+str(LAR)+"_lead"+str(LEAD)+".root"
+if CLUSTER==1: #otherwise use the generic name output.root for Grid runs
+    out.filename = "/mnt/broach/e"+str(int(ENE/1e3))+"_part"+str(i)+"_lar"+str(LAR)+"_lead"+str(LEAD)+".root"
 
 out.outputCommands = ["keep *"]
+
+#CPU information
+from Configurables import AuditorSvc, ChronoAuditor
+chra = ChronoAuditor()
+audsvc = AuditorSvc()
+audsvc.Auditors = [chra]
+geantsim.AuditExecute = True
 
 # ApplicationMgr
 from Configurables import ApplicationMgr
@@ -89,6 +96,6 @@ ApplicationMgr( TopAlg = [geantsim
                 EvtSel = 'NONE',
                 EvtMax   = EVTMAX,
                 # order is important, as GeoSvc is needed by G4SimSvc
-                ExtSvc = [podioevent, geoservice, geantservice],
+                ExtSvc = [podioevent, geoservice, geantservice, audsvc],
                 OutputLevel=INFO
  )

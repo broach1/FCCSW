@@ -6,22 +6,22 @@ i=1
 NJOBS=4  
 #total number of jobs to submit
 
-LAR=5          
-LEAD=1         
-SM=6             
+LAR=6          
+LEAD=2         
+SM=8             
 #mm
 #SM=LAR+LEAD
 
-NTOT=500         
+NTOT=1000         
 #total number of events across all jobs: NTOT=EVTMAX*NJOBS
 
 BFIELD=0         
 #0 off, 1 on
 
-ENE=250e3    
+ENE=50e3    
 #MeV
 
-EVTMAX=125      
+EVTMAX=250      
 #number of events in each job
 
 PHIMIN=0    

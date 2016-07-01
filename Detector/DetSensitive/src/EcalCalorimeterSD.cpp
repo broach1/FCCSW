@@ -1,4 +1,4 @@
-#include "DetSensitive/SimpleCalorimeterSD.h"
+#include "DetSensitive/EcalCalorimeterSD.h"
 
 // FCCSW
 #include "DetSensitive/SegmentationHelper.h"
@@ -11,7 +11,7 @@
 #include "CLHEP/Vector/ThreeVector.h"
 
 namespace det {
-SimpleCalorimeterSD::SimpleCalorimeterSD(const std::string& aDetectorName,
+EcalCalorimeterSD::EcalCalorimeterSD(const std::string& aDetectorName,
   const std::string& aReadoutName,
   const DD4hep::Geometry::Segmentation& aSeg)
   : G4VSensitiveDetector(aDetectorName), m_seg(aSeg) {
@@ -19,9 +19,9 @@ SimpleCalorimeterSD::SimpleCalorimeterSD(const std::string& aDetectorName,
   collectionName.insert(aReadoutName);
 }
 
-SimpleCalorimeterSD::~SimpleCalorimeterSD(){}
+EcalCalorimeterSD::~EcalCalorimeterSD(){}
 
-void SimpleCalorimeterSD::Initialize(G4HCofThisEvent* aHitsCollections)
+void EcalCalorimeterSD::Initialize(G4HCofThisEvent* aHitsCollections)
 {
   static int HCID = -1;
   // create a collection of hits and add it to G4HCofThisEvent
@@ -29,28 +29,30 @@ void SimpleCalorimeterSD::Initialize(G4HCofThisEvent* aHitsCollections)
   calorimeterCollection = new G4THitsCollection
     <DD4hep::Simulation::Geant4CalorimeterHit>(SensitiveDetectorName,collectionName[0]);
   // get id for collection
-  if(HCID<0)
+  if(HCID<0) {
     HCID = GetCollectionID(0);
+  }
   aHitsCollections->AddHitsCollection(HCID,calorimeterCollection);
 }
 
-bool SimpleCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+bool EcalCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   // check if energy was deposited
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.)
+  if(edep==0.) {
     return false;
+  }
 
   // as in DD4hep::Simulation::Geant4GenericSD<Calorimeter>
   CLHEP::Hep3Vector prePos = aStep->GetPreStepPoint()->GetPosition();
   CLHEP::Hep3Vector postPos = aStep->GetPostStepPoint()->GetPosition();
-  CLHEP::Hep3Vector midPos = 0.5*(postPos + prePos);
-  DD4hep::Simulation::Position pos(midPos.x(), midPos.y(), midPos.z());
+  
+  DD4hep::Simulation::Position pos(prePos.x(), prePos.y(), prePos.z());
   // check the cell ID
   uint64_t id = segmentation::cellID(m_seg, *aStep);
   DD4hep::Simulation::Geant4CalorimeterHit* hit, *hitMatch = nullptr;
   // Check if there is already some energy deposit in that cell
- 
+
   /*
   for(int i=0; i<calorimeterCollection->entries(); i++) {
     hit = dynamic_cast<DD4hep::Simulation::Geant4CalorimeterHit*>
@@ -63,17 +65,18 @@ bool SimpleCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   }
   */
   
+  
+
   // if not, create a new hit
   // deleted in ~G4Event
-
-  
   hitMatch = new DD4hep::Simulation::Geant4CalorimeterHit(pos);
   // hit is expected to be created, otherwise abort job
   assert(hitMatch != nullptr);
   hitMatch->cellID  = id;
   hitMatch->energyDeposit = edep;
   calorimeterCollection->insert(hitMatch);
-  
   return true;
 }
 }
+
+

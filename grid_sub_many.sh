@@ -5,12 +5,12 @@ mv build.x86_64-slc6-gcc49-opt ../
 i=1             
 #iteration number - begins with 1
 
-NJOBS=34
+NJOBS=2
 #total number of jobs to submit
 
-LAR=5        
-LEAD=1         
-SM=6           
+LAR=7        
+LEAD=5         
+SM=12           
 #mm
 #SM=LAR+LEAD
 
@@ -20,10 +20,10 @@ NTOT=500
 BFIELD=0         
 #0 off, 1 on
 
-ENE=500e3    
+ENE=1000e3    
 #MeV
 
-EVTMAX=15     
+EVTMAX=250     
 #number of events in each job
 
 PHIMIN=0    
