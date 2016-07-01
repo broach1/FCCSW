@@ -81,6 +81,7 @@ namespace det {
 
     // Step 1 : cryostat
   
+    /*
     DetElement cryo(cryostat.nameStr(), 0);
     DD4hep::Geometry::Tube cryoShape(cryo_dims.rmin() , cryo_dims.rmax(), cryo_dims.dz());
     lLog << MSG::INFO << "ECAL Building cryostat from " << cryo_dims.rmin() << " cm to " << cryo_dims.rmax() << " cm"<< endmsg;
@@ -100,7 +101,8 @@ namespace det {
     PlacedVolume placedBath = cryoVol.placeVolume(bathVol);
     placedBath.addPhysVolID("bath", 1);
     calo_bath.setPlacement(placedBath);
-  
+    */
+
     // Step 3 : create the actual calorimeter
 
     int n_samples_r= (calo_dims.rmax()-  calo_dims.rmin() - passive_tck)/(passive_tck+active_tck);
@@ -201,7 +203,7 @@ namespace det {
 	double zOffset = -calo_halfz+(2*i+1)*halfz_cell;
 	DD4hep::Geometry::Position offset(0, 0, zOffset);
 	DetElement caloZMod("calo_cells_inz", i+1);
-	PlacedVolume placedCaloZVolume = bathVol.placeVolume(caloZVol, offset);
+	PlacedVolume placedCaloZVolume = envelopeVolume.placeVolume(caloZVol, offset);
 	placedCaloZVolume.addPhysVolID("z_layer", i+1);
 	caloZMod.setPlacement(placedCaloZVolume);
 	//caloZMod.setVisAttributes(lcdd,caloZmodule.visStr(),caloZVol);  
