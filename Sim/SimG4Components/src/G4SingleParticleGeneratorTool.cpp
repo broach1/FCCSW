@@ -95,6 +95,7 @@ StatusCode G4SingleParticleGeneratorTool::saveToEdm(const G4PrimaryVertex* aVert
   fcc::GenVertexCollection* vertices = new fcc::GenVertexCollection();
   auto vertex = vertices->create();
   auto& position = vertex.Position();
+
   position.X = aVertex->GetX0()*sim::g42edm::length;
   position.Y = aVertex->GetY0()*sim::g42edm::length;
   position.Z = aVertex->GetZ0()*sim::g42edm::length;
@@ -104,6 +105,9 @@ StatusCode G4SingleParticleGeneratorTool::saveToEdm(const G4PrimaryVertex* aVert
   fcc::BareParticle& core = particle.Core();
   core.Type = aParticle->GetPDGcode();
   core.Status = 1;
+
+  core.Charge = aParticle->GetCharge();
+
   core.P4.Px = aParticle->GetPx()*sim::g42edm::energy;
   core.P4.Py = aParticle->GetPy()*sim::g42edm::energy;
   core.P4.Pz = aParticle->GetPz()*sim::g42edm::energy;
