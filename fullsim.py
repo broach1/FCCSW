@@ -2,18 +2,18 @@ import os
 import numpy as np
 
 #loads array of random seeds from file
-#seed_array = np.loadtxt('seeds.txt',dtype='int',delimiter=',')
+seed_array = np.loadtxt('seeds.txt',dtype='int',delimiter=',')
 
 #the space below (lines 8-22) are for job options (ENE, EVTMAX, etc)
-ENE=1000e3
-EVTMAX=250
+ENE=20e3
+EVTMAX=1
 BFIELD=0
 PHIMIN=0
 PHIMAX=6.28
 VX=0
 VY=0
 VZ=0
-i=2
+i=5
 CLUSTER=0
 
 
@@ -62,22 +62,27 @@ saveecaltool.DataOutputs.caloClusters.Path = "ECalClusters"
 saveecaltool.DataOutputs.caloHits.Path = "ECalHits"
 #saveecaltool.DataOutputs.trackHitsClusters.Path = "hitClusterAssociation"
 # next, create the G4 algorithm, giving the list of names of tools ("XX/YY")
-pgun = G4SingleParticleGeneratorTool("gun", etaMin=0.25, etaMax=0.25, phiMin=PHIMIN, phiMax=PHIMAX, energyMin=ENE, energyMax=ENE, particleName="e-")
+pgun = G4SingleParticleGeneratorTool("gun", saveEdm=True, etaMin=-0.01, etaMax=0.01, phiMin=PHIMIN, phiMax=PHIMAX, energyMin=ENE, energyMax=ENE, particleName="e-")
+#pgun.DataOutputs.genParticles.Path = "genParticles"
 geantsim = G4SimAlg("G4SimAlg",
                     outputs= ["G4SaveCalHits/saveCalHits" ],
                     eventGenerator=pgun)
 
-#geantservice.G4commands += ["/random/setSeeds "+str(seed_array[i-1])+" 0"]
+
+
+geantservice.G4commands += ["/random/setSeeds "+str(seed_array[i-1])+" 0"]
 #since the loop to generate the subjobs begins with 1, we need (i-1) to index
 
+#set range cuts
+geantservice.G4commands += ["/run/setCut 0.1 mm"] 
 
 # PODIO algorithm
 from Configurables import PodioOutput
 out = PodioOutput("out",
-                   OutputLevel=ERROR)
+                   OutputLevel=INFO)
 
 if CLUSTER==1: #otherwise use the generic name output.root for Grid runs
-    out.filename = "/mnt/broach/e"+str(int(ENE/1e3))+"_part"+str(i)+"_lar"+str(LAR)+"_lead"+str(LEAD)+".root"
+    out.filename = "/tmp/e"+str(int(ENE/1e3))+"_part"+str(i)+"_lar"+str(LAR)+"_lead"+str(LEAD)+".root"
 
 out.outputCommands = ["keep *"]
 

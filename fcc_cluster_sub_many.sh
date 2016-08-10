@@ -7,21 +7,21 @@ NJOBS=4
 #total number of jobs to submit
 
 LAR=6          
-LEAD=2         
-SM=8             
+LEAD=4         
+SM=10         
 #mm
 #SM=LAR+LEAD
 
-NTOT=1000         
+NTOT=10000         
 #total number of events across all jobs: NTOT=EVTMAX*NJOBS
 
 BFIELD=0         
 #0 off, 1 on
 
-ENE=50e3    
+ENE=100e3    
 #MeV
 
-EVTMAX=250      
+EVTMAX=2500     
 #number of events in each job
 
 PHIMIN=0    
@@ -39,6 +39,7 @@ CLUSTER=1
 cp ../new_ecal_dim/${SM}mm/out_LAR${LAR}_LEAD${LEAD}.xml Detector/DetFCChhECalSimple/compact/FCChh_ECalDefinition.xml
 
 source init.sh
+
 
 
 while [ $i -le $NJOBS ]
@@ -63,5 +64,4 @@ sed -i "19s/.*/LEAD=$LEAD/g" fullsim$i.py
 
 ./run gaudirun.py fullsim$i.py > output_$i.log 2>&1 &
 i=$[$i+1]
-
 done
